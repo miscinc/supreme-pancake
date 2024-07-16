@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  web:
+    image: tiangolo/uvicorn-gunicorn-fastapi:python3.8
+    container_name: kv_db_web
+    ports:
+      - "8000:80"
+    volumes:
+      - ./app:/app
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:6
+    container_name: kv_db_redis
+    ports:
+      - "6379:6379"
+
+  ngrok:
+    image: wernight/ngrok
+    container_name: ngrok
+    command: ngrok http web:80
+    ports:
+      - "4040:4040"
+      - "80:80"
